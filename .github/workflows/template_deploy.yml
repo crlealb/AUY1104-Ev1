@@ -38,10 +38,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
 
       - name: Configurar Kubectl para EKS
-        uses: aws-actions/eks-set-context@v4
-        with:
-          cluster-name: ${{ inputs.eks-cluster-name }}
-          aws-region: ${{ inputs.aws-region }}
+        run: aws eks update-kubeconfig --name ${{ inputs.eks-cluster-name }} --region ${{ inputs.aws-region }}
 
       - name: Desplegar Nueva Imagen en EKS (Rolling Update)
         run: |
