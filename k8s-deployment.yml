@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-rolling
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: techmarket
+  template:
+    metadata:
+      labels:
+        app: techmarket
+    spec:
+      containers:
+      - name: duoc-app-rolling
+        image: nginx:latest
+        ports:
+        - containerPort: 80
