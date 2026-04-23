@@ -29,6 +29,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: ⬇️ Checkout del Código
+        uses: actions/checkout@v4
+
       - name: Configurar Credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,11 +45,11 @@ jobs:
 
       - name: Desplegar Nueva Imagen en EKS (Rolling Update)
         run: |
-            # 1. Aplica el manifiesto base desde el repositorio
-            kubectl apply -f k8s-deployment.yml
-                
-            # 2. Actualiza la imagen dinámicamente con la versión recién construida
-            kubectl set image deployment/${{ inputs.deployment-name }} ${{ inputs.deployment-name }}=${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ vars.ECR_REPOSITORY }}:${{ inputs.image-tag }}
-                
-            # 3. Verifica el estado del despliegue
-            kubectl rollout status deployment/${{ inputs.deployment-name }} --timeout=300s
+          # 1. Aplica el manifiesto base desde el repositorio
+          kubectl apply -f k8s-deployment.yml
+              
+          # 2. Actualiza la imagen dinámicamente con la versión recién construida
+          kubectl set image deployment/${{ inputs.deployment-name }} ${{ inputs.deployment-name }}=${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ vars.ECR_REPOSITORY }}:${{ inputs.image-tag }}
+              
+          # 3. Verifica el estado del despliegue
+          kubectl rollout status deployment/${{ inputs.deployment-name }} --timeout=300s
